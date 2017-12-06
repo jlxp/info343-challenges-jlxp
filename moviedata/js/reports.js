@@ -47,7 +47,8 @@ function getTitle(movie) {
  */
 function getYearReleased(movie) {
     //TODO: implement this according to the comments above
-
+    //note that the `released` property is a string in the
+    //format YYYY-MM-DD (e.g., 2017-12-31)
 }
 
 /**
@@ -99,9 +100,8 @@ function totalTicketsSold(moviesArray) {
     // the parameter value and throw an error yourself). This is true
     // for all the rest of the functions as well.
 
-    //try using the .forEach() or .reduce() methods on the moviesArray
+    //try using the .reduce() methods on the moviesArray
     //to calculate this value using functional programming techniques
-    //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach
     //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce
 
 }
@@ -128,18 +128,19 @@ function allCitations(moviesArray) {
  * `gross` property (i.e. the movie with the largest gross sales).
  * @param {Movie[]} moviesArray - an array of objects, where each
  * object has the Movie properties listed above
- * @returns {Movie} the movie with the largest gross sales
+ * @returns {Movie} the movie object with the largest gross sales
  */
 function topGrossingMovie(moviesArray) {
     //TODO: implement this according to the comments above
-    //try using .reduce() or .forEach() to accomplish this
+    //you can use a standard for loop to accomplish this, but
+    //try using .reduce() instead for a more elegant solution
     //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce
 
 }
 
 /**
  * Returns a new array containing only the movies where the
- * `distributor` property equals "Walt Disney".
+ * `distributor` property equals "Walt Disney" in any casing.
  * @param {Movie[]} moviesArray - an array of objects, where each
  * object has the Movie properties listed above
  * @returns {Movie[]} an array containing only the movies 
@@ -147,6 +148,9 @@ function topGrossingMovie(moviesArray) {
  */
 function onlyDisneyMovies(moviesArray) {
     //TODO: implement this according to the comments above
+    //match any casing of "Walt Disney": for example,
+    //you should include records where `distributor` equals
+    //"Walt Disney" or "walt disney" or "WALT DISNEY", etc.
     //try using .filter() to accomplish this
     //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter
 
@@ -168,19 +172,24 @@ function top10DisneyMovies(moviesArray) {
 
 /**
  * Returns the top 10 grossing movies that have the value "Comedy"
- * in their `genre` property.
+ * in their `genre` property, regardless of casing.
  * @param {Movie[]} moviesArray - an array of objects, where each
  * object has the Movie properties listed above
  * @returns {Movie[]} an array containing the top 10 grossing comedy movie objects
  */
 function top10Comedies(moviesArray) {
     //TODO: implement this according to the comments above
+    //your code should do a case-insensitive comparison 
+    //of the `genre` property so that you include
+    //"Comedy", "comedy", "COMEDY", etc.
 
 }
 
 /**
  * Returns an array containing strings, one for each distinct
  * `distributor` property value in the input array of objects.
+ * If a movie doesn't have a `distributor` property value, the 
+ * literal string "(none)" will be used instead.
  * @param {Movie[]} moviesArray - an array of objects, where each
  * object has the Movie properties listed above
  * @returns {string[]} an array of strings containing one element
@@ -188,13 +197,13 @@ function top10Comedies(moviesArray) {
  */
 function distinctDistributors(moviesArray) {
     //TODO: implement this according to the comments above
+    //if the `distributor` property for a movie is missing or
+    //zero-length, use the literal string "(none)" instead.
+
     //HINT: many movies are released by the same distributor, 
     // so you need to select only the distinct distributor
     // values and return those as an array. Remember that the
-    // properties of a JavaScript object are a unique set, and
-    // that newer browsers support the Set collection (but older)
-    // browsers will generate errors if you try to use Set)
-    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set
+    // properties of a JavaScript object are a unique set.
 
 }
 
@@ -224,7 +233,9 @@ function countByRating(moviesArray) {
  * Each object contains two properties: `genre` and `gross`,
  * where `genre` is the distinct genre name (e.g., "Adventure"),
  * and `gross` is the sum of gross sales for all movies in that
- * genre. The array is sorted so that the top-grossing genres are
+ * genre. If a movie has no value for the `genre` property,
+ * the literal string "(none)" will be used instead.
+ * The array is sorted so that the top-grossing genres are
  * at the start of the array.
  * 
  * For example, the returned array will look something like this:

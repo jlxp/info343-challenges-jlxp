@@ -263,7 +263,6 @@ describe("report functions", function() {
             expect(results[0]).to.have.property("releasedFromNow");
             expect(results[0]).to.include({
                 title: "Elevator to the Gallows",
-                releasedFromNow: "56 years ago",
                 gross: 110193,
                 tickets: 12739
             });
