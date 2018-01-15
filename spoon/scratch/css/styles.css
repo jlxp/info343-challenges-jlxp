@@ -72,15 +72,21 @@ div .feature {
 
 .card img {
     width: 100%;
+    border-color: rgba(0, 0, 0, 0.125);
     border-radius: 0.25rem 0.25rem 0 0;
 }
+
 .card {
-    background-color: #fff;
     border-color: rgba(0, 0, 0, 0.125);
     border-radius: 0.25rem;
+    background-color: #fff;
+    height: 100%;
 }
 
-div .use,
+.use {
+    padding: 0.5rem;
+}
+
 .card-body {
     padding: 1rem;
 }
@@ -103,6 +109,7 @@ footer {
     background-size: 100%;
     color: #fff;
 }
+
 footer a {
     fill: #fff;
     color: #fff;
@@ -132,6 +139,7 @@ footer a:focus {
         font-weight: lighter;
         font-size: 1.25em;
     }
+
     header h1 {
         font-size: 7rem;
     }
@@ -149,13 +157,13 @@ footer a:focus {
     header a:focus {
         background-color: #1e7e34;
     }
-
     #uses .container {
         display: flex;
         flex-wrap: wrap;
+        justify-content: space-between;
     }
-    .container .use {
-        flex: 1 0 50%;
+    .use {
+        flex: 0 1 49%;
     }
 
     footer .container {
@@ -163,7 +171,6 @@ footer a:focus {
         flex-direction: row-reverse;
         justify-content: space-between;
     }
-
 }
 
 @media (min-width: 992px) {
@@ -178,8 +185,8 @@ footer a:focus {
         padding: 0rem 1.5rem;
     }
 
-    .container .use {
-        flex: 1;
+    .use {
+        flex: 0 1 24%;
     }
     
     #testimonials .container {
