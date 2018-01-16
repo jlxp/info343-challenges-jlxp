@@ -1,0 +1,47 @@
+@media (min-width: 768px) {
+    header {
+        background-image: url(../img/header.jpg);
+        background-position: center;
+        height: 400px;
+
+        .container {
+            text-align: right;
+            float: right;
+            padding-right: 50px;
+            padding-left: 40%;
+        }
+
+        .lead {
+            font-weight: lighter;
+            font-size: 1.25em;
+        }
+
+        h1 {
+            font-size: 7rem;
+        }
+
+        a {
+            display: initial;
+            background: $theme-color;
+            padding: 0.5rem $padding;
+            border-radius: 0.25rem;
+            color: #fff;
+            text-decoration: none;
+        }
+        
+        a:hover,
+        a:focus {
+            background-color: darken($color: $theme-color, $amount: 10%);
+        }
+    }
+
+    .use {
+        flex: 0 1 49%;
+    }
+
+    footer .container {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: space-between;
+    }
+}
