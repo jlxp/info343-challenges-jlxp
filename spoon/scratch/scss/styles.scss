@@ -1,0 +1,139 @@
+$font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+$theme-color: #28a745;
+$no-margin: 0;
+$padding: 1rem;
+$white: #fff;
+$border-curve: 0.25rem;
+$border-edge: rgba(0, 0, 0, 0.125);
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Open Sans", $font-stack;
+    line-height: 1.5;
+}
+
+p {
+    margin-top: $no-margin;
+}
+
+h1, h2, h3, h4 {
+    font-family: "Encode Sans", $font-stack;
+    font-weight: 200;
+    line-height: 1.1;
+    margin-top: $no-margin;
+    margin-bottom: 0.5rem;
+}
+
+.container {
+    max-width: 1140px;
+    margin: $no-margin auto;
+    padding: 0 $padding;
+}
+
+header {
+    background-color: #e9ecef;
+
+    h1 {
+        color: $theme-color;
+        font-size: 5rem;
+    }
+
+    .container {
+        padding: 8% $padding;
+    }
+
+    a {
+        display: none;
+    }
+}
+
+#features,
+#uses,
+#testimonials, 
+footer {
+    padding: 5% 0rem;
+}
+
+.feature {
+    display: flex;
+    flex: 1;
+    align-items: flex-start;
+    svg {
+        fill: $theme-color;
+        padding-right: $padding;
+    }
+}
+
+#uses {
+    background-color: #f8f9fa;
+    background-size: 100%;
+    .use {
+        padding: 0.5rem;
+
+        .card {
+            border-color: $border-edge;
+            border-radius: $border-curve;
+            background-color: $white;
+            height: 100%;
+        
+            img {
+                width: 100%;
+                border-color: $border-edge;
+                border-radius: $border-curve $border-curve 0 0;
+            }
+            .card-body {
+                padding: $padding;
+            }
+        }
+    }
+}
+
+
+#testimonials {
+    .container {
+        text-align: center;
+        
+        .testimonial {
+            img {
+                border-radius: 50%;
+            }
+            
+            .occupation {
+                font-size: 0.8em;
+                color: #808080;
+            }
+        }
+    }
+}
+
+footer {
+    background-color: $theme-color;
+    background-size: 100%;
+    color: $white;
+
+    a {
+        fill: $white;
+        color: $white;
+        text-decoration: none;
+    }
+
+    a:hover,
+    a:focus {
+        background-color: darken($color: #f8f9fa, $amount: 20%);
+    }
+}
+
+#uses {
+    .container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+}
+
+@import '768px_partial.scss';
+
+@import '992px_partial.scss';
