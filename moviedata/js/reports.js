@@ -2,7 +2,7 @@
 
 //TODO: set the JavaScript interpreter into script mode
 //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode
-
+"use strict"
 //The following is only used by Visual Studio Code and other JSDoc-aware
 //editors. It doesn't affect the way your code is executed at runtime,
 //but it does help VSCode provide intelligent suggestions as you write
@@ -34,7 +34,10 @@ function getTitle(movie) {
     //(which is an object), or the literal string "(no title)" 
     //if the `movie` parameter is null/undefined or has no `title`
     //property
-    
+    if (movie === null || movie === undefined || !movie.hasOwnProperty("title")) {
+        return "(no title)";
+    }
+    return movie.title;
 }
 
 /**
@@ -49,6 +52,10 @@ function getYearReleased(movie) {
     //TODO: implement this according to the comments above
     //note that the `released` property is a string in the
     //format YYYY-MM-DD (e.g., 2017-12-31)
+    if (movie !== null && movie !== undefined && movie.hasOwnProperty("released")) {
+        return Number(movie.released.substr(0, 4));
+    }
+    return undefined;
 }
 
 /**
@@ -67,7 +74,11 @@ function getYearReleased(movie) {
  */
 function getCitation(movie) {
     //TODO: implement this according to the comments above
-
+    let result = getTitle(movie);
+    if (getYearReleased(movie) !== undefined) {
+        result += " (" + getYearReleased(movie) + ")";
+    }
+    return result;
 }
 
 /**
@@ -82,7 +93,13 @@ function getCitation(movie) {
  */
 function getAvgTicketPrice(movie) {
     //TODO: implement this according to the comments above
-
+    if (movie === null || movie === undefined) {
+        return undefined;
+    } else if (!(movie.hasOwnProperty("gross") || movie.hasOwnProperty("tickets"))) {
+        return NaN;
+    } else {
+        return movie.gross / movie.tickets;
+    }
 }
 
 /**
@@ -103,7 +120,14 @@ function totalTicketsSold(moviesArray) {
     //try using the .reduce() methods on the moviesArray
     //to calculate this value using functional programming techniques
     //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce
-
+    return moviesArray.reduce(
+        function(prev, current) {
+            if (!current.hasOwnProperty("tickets")) {
+                return 0;
+            }
+            return prev + current.tickets;
+        }, 0
+    );
 }
 
 /**
@@ -120,6 +144,11 @@ function allCitations(moviesArray) {
     //try using the .map() method on the moviesArray
     //to accomplish this in one short line of code!
     //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
+    return moviesArray.map(
+        function(movie) {
+            return getCitation(movie);
+        }
+    );
 }
 
 /**
@@ -135,7 +164,18 @@ function topGrossingMovie(moviesArray) {
     //you can use a standard for loop to accomplish this, but
     //try using .reduce() instead for a more elegant solution
     //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce
-
+    if (moviesArray.length === 0) {
+        return undefined;
+    }
+    return moviesArray.reduce(
+        function(prev, current) {
+            if (prev.gross < current.gross) {
+                return current;
+            } else {
+                return prev;
+            }
+        }
+    );
 }
 
 /**
@@ -153,7 +193,11 @@ function onlyDisneyMovies(moviesArray) {
     //"Walt Disney" or "walt disney" or "WALT DISNEY", etc.
     //try using .filter() to accomplish this
     //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter
-
+    return moviesArray.filter(
+        function(movie) {
+            return movie.distributor.toLocaleLowerCase() === "walt disney";
+        }
+    )
 }
 
 /**
@@ -167,7 +211,12 @@ function top10DisneyMovies(moviesArray) {
     //TODO: implement this according to the comments above
     //HINT: you can use the .sort() method to sort an array
     //and the .slice() method to slice off the first 10 elements
-    
+    let disney = onlyDisneyMovies(moviesArray);
+    return disney.sort(
+        function(first, second) {
+            return second.gross - first.gross;
+        }
+    ).slice(0, 10);
 }
 
 /**
@@ -182,7 +231,10 @@ function top10Comedies(moviesArray) {
     //your code should do a case-insensitive comparison 
     //of the `genre` property so that you include
     //"Comedy", "comedy", "COMEDY", etc.
-
+    return moviesArray
+    .filter(function(movie){return movie.genre.toLowerCase() === "comedy";})
+    .sort(function(first, second) {return second.gross - first.gross;})
+    .slice(0, 10);
 }
 
 /**
@@ -204,7 +256,20 @@ function distinctDistributors(moviesArray) {
     // so you need to select only the distinct distributor
     // values and return those as an array. Remember that the
     // properties of a JavaScript object are a unique set.
-
+    let result = moviesArray.map(
+        function(movie) {
+            if (movie.hasOwnProperty("distributor")) {
+                if (result.length === 0) {
+                    return movie.distributor;
+                } else if (result.indexOf(movie.distributor) === -1) {
+                    return movie.distributor;
+                }
+            } else {
+                return "(none)";
+            }
+        }
+    )
+    return result;
 }
 
 /**
