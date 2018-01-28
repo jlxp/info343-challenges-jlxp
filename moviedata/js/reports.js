@@ -256,20 +256,23 @@ function distinctDistributors(moviesArray) {
     // so you need to select only the distinct distributor
     // values and return those as an array. Remember that the
     // properties of a JavaScript object are a unique set.
-    let result = moviesArray.map(
+    return moviesArray
+    .map(
         function(movie) {
             if (movie.hasOwnProperty("distributor")) {
-                if (result.length === 0) {
-                    return movie.distributor;
-                } else if (result.indexOf(movie.distributor) === -1) {
-                    return movie.distributor;
-                }
+                return movie.distributor;
             } else {
                 return "(none)";
             }
         }
     )
-    return result;
+    .sort()
+    .reduce((init, current)=>{
+        if(init.length===0 || init[init.length-1]!==current){
+            init.push(current);
+        }
+        return init;
+    }, []);
 }
 
 /**
@@ -289,7 +292,22 @@ function distinctDistributors(moviesArray) {
  */
 function countByRating(moviesArray) {
     //TODO: implement this according to the comments above
-
+    return moviesArray
+    .map(
+        function(movie) {
+            return movie.rating;
+        }
+    )
+    .reduce(
+        function (count, rating) { 
+            if (rating in count) {
+                count[rating]++;
+            } else {
+                count[rating] = 1;
+            }
+            return count;
+        }, {}
+    );
 }
 
 /**
@@ -327,9 +345,43 @@ function countByRating(moviesArray) {
  */
 function grossByGenre(moviesArray) {
     //TODO: implement this according to the comments above
-
+    return moviesArray
+    .map(
+        function(movie) {
+            let temp = {};
+            if (movie.genre === "") {
+                movie.genre = "(none)";
+            }
+            temp.genre = movie.genre;
+            temp.gross = movie.gross;
+            return temp;
+        }
+    )
+    .sort(
+        function(a, b) {
+            let nameA = a.genre.toUpperCase();
+            let nameB = b.genre.toUpperCase();
+            if (nameA < nameB) {
+                return -1;
+            }
+            if (nameA > nameB) {
+                return 1;
+            }
+            return 0;
+        }
+    )
+    .reduce(
+        function(prev, current, index, array) {
+            if(prev.length === 0 || array[index].genre !== prev[prev.length - 1].genre){
+                prev.push(current);
+            } else {
+                prev[prev.length - 1].gross += array[index].gross;
+            }
+            return prev;
+        }, []
+    )
 }
-
+console.log(grossByGenre(MOVIES));
 
 ///////////////////////////////////////////////////////////////////////////////
 // EXTRA CREDIT REPORTS
