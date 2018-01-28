@@ -380,8 +380,12 @@ function grossByGenre(moviesArray) {
             return prev;
         }, []
     )
+    .sort(
+        function(genre1, genre2) {
+            return genre2.gross-genre1.gross;
+        }
+    )
 }
-console.log(grossByGenre(MOVIES));
 
 ///////////////////////////////////////////////////////////////////////////////
 // EXTRA CREDIT REPORTS
