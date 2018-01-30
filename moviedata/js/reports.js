@@ -121,11 +121,11 @@ function totalTicketsSold(moviesArray) {
     //to calculate this value using functional programming techniques
     //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce
     return moviesArray.reduce(
-        function(prev, current) {
-            if (!current.hasOwnProperty("tickets")) {
+        function(sumOfTickets, currentTicket) {
+            if (!currentTicket.hasOwnProperty("tickets")) {
                 return 0;
             }
-            return prev + current.tickets;
+            return sumOfTickets + currentTicket.tickets;
         }, 0
     );
 }
@@ -168,11 +168,11 @@ function topGrossingMovie(moviesArray) {
         return undefined;
     }
     return moviesArray.reduce(
-        function(prev, current) {
-            if (prev.gross < current.gross) {
-                return current;
+        function(prevMovie, currentMovie) {
+            if (prevMovie.gross < currentMovie.gross) {
+                return currentMovie;
             } else {
-                return prev;
+                return prevMovie;
             }
         }
     );
@@ -195,9 +195,9 @@ function onlyDisneyMovies(moviesArray) {
     //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter
     return moviesArray.filter(
         function(movie) {
-            return movie.distributor.toLocaleLowerCase() === "walt disney";
+            return movie.distributor.toLowerCase() === "walt disney";
         }
-    )
+    );
 }
 
 /**
@@ -211,12 +211,13 @@ function top10DisneyMovies(moviesArray) {
     //TODO: implement this according to the comments above
     //HINT: you can use the .sort() method to sort an array
     //and the .slice() method to slice off the first 10 elements
-    let disney = onlyDisneyMovies(moviesArray);
-    return disney.sort(
+    return onlyDisneyMovies(moviesArray)
+    .sort(
         function(first, second) {
             return second.gross - first.gross;
         }
-    ).slice(0, 10);
+    )
+    .slice(0, 10);
 }
 
 /**
@@ -232,8 +233,16 @@ function top10Comedies(moviesArray) {
     //of the `genre` property so that you include
     //"Comedy", "comedy", "COMEDY", etc.
     return moviesArray
-    .filter(function(movie){return movie.genre.toLowerCase() === "comedy";})
-    .sort(function(first, second) {return second.gross - first.gross;})
+    .filter(
+        function(movie) {
+            return movie.genre.toLowerCase() === "comedy";
+        }
+    )
+    .sort(
+        function(first, second) {
+            return second.gross - first.gross;
+        }
+    )
     .slice(0, 10);
 }
 
@@ -267,12 +276,13 @@ function distinctDistributors(moviesArray) {
         }
     )
     .sort()
-    .reduce((init, current)=>{
-        if(init.length===0 || init[init.length-1]!==current){
-            init.push(current);
-        }
-        return init;
-    }, []);
+    .reduce((distributorArr, current) => {
+            if(distributorArr.length === 0 || distributorArr[distributorArr.length - 1]!== current){
+                distributorArr.push(current);
+            }
+            return distributorArr;
+        }, []
+    );
 }
 
 /**
@@ -291,7 +301,6 @@ function distinctDistributors(moviesArray) {
  * }
  */
 function countByRating(moviesArray) {
-    //TODO: implement this according to the comments above
     return moviesArray
     .map(
         function(movie) {
@@ -344,7 +353,6 @@ function countByRating(moviesArray) {
  * the start of the array.
  */
 function grossByGenre(moviesArray) {
-    //TODO: implement this according to the comments above
     return moviesArray
     .map(
         function(movie) {
@@ -371,18 +379,18 @@ function grossByGenre(moviesArray) {
         }
     )
     .reduce(
-        function(prev, current, index, array) {
-            if(prev.length === 0 || array[index].genre !== prev[prev.length - 1].genre){
-                prev.push(current);
+        function(result, currentObj, index, thisArray) {
+            if(result.length === 0 || thisArray[index].genre !== result[result.length - 1].genre){
+                result.push(currentObj);
             } else {
-                prev[prev.length - 1].gross += array[index].gross;
+                result[result.length - 1].gross += thisArray[index].gross;
             }
-            return prev;
+            return result;
         }, []
     )
     .sort(
         function(genre1, genre2) {
-            return genre2.gross-genre1.gross;
+            return genre2.gross - genre1.gross;
         }
     )
 }
