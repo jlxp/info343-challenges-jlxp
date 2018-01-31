@@ -30,10 +30,6 @@
  * @returns {string} the title of the movie or "(no title)"
  */
 function getTitle(movie) {
-    //TODO: return the `title` property of the `movie` parameter
-    //(which is an object), or the literal string "(no title)" 
-    //if the `movie` parameter is null/undefined or has no `title`
-    //property
     if (movie === null || movie === undefined || !movie.hasOwnProperty("title")) {
         return "(no title)";
     }
@@ -49,9 +45,6 @@ function getTitle(movie) {
  * @returns {number|undefined} the year the movie was released
  */
 function getYearReleased(movie) {
-    //TODO: implement this according to the comments above
-    //note that the `released` property is a string in the
-    //format YYYY-MM-DD (e.g., 2017-12-31)
     if (movie !== null && movie !== undefined && movie.hasOwnProperty("released")) {
         return Number(movie.released.substr(0, 4));
     }
@@ -73,7 +66,6 @@ function getYearReleased(movie) {
  * @returns {string} a citation for the movie
  */
 function getCitation(movie) {
-    //TODO: implement this according to the comments above
     let result = getTitle(movie);
     if (getYearReleased(movie) !== undefined) {
         result += " (" + getYearReleased(movie) + ")";
@@ -92,7 +84,6 @@ function getCitation(movie) {
  * @returns {number|undefined} the average ticket price for the movie
  */
 function getAvgTicketPrice(movie) {
-    //TODO: implement this according to the comments above
     if (movie === null || movie === undefined) {
         return undefined;
     } else if (!(movie.hasOwnProperty("gross") || movie.hasOwnProperty("tickets"))) {
@@ -110,16 +101,6 @@ function getAvgTicketPrice(movie) {
  * @returns {number} the sum of all tickets sold for all movies
  */
 function totalTicketsSold(moviesArray) {
-    //TODO: implement this according to the comments above
-    //NOTE:  If `moviesArray` is null/undefined, that is a programming
-    // error so let this function generate an exception when you
-    // try to use that parameter (i.e., no need to explicitly check
-    // the parameter value and throw an error yourself). This is true
-    // for all the rest of the functions as well.
-
-    //try using the .reduce() methods on the moviesArray
-    //to calculate this value using functional programming techniques
-    //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce
     return moviesArray.reduce(
         function(sumOfTickets, currentTicket) {
             if (!currentTicket.hasOwnProperty("tickets")) {
@@ -140,10 +121,6 @@ function totalTicketsSold(moviesArray) {
  * @returns {string[]} array of citation strings
  */
 function allCitations(moviesArray) {
-    //TODO: implement this according to the comments above
-    //try using the .map() method on the moviesArray
-    //to accomplish this in one short line of code!
-    //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map
     return moviesArray.map(
         function(movie) {
             return getCitation(movie);
@@ -160,10 +137,6 @@ function allCitations(moviesArray) {
  * @returns {Movie} the movie object with the largest gross sales
  */
 function topGrossingMovie(moviesArray) {
-    //TODO: implement this according to the comments above
-    //you can use a standard for loop to accomplish this, but
-    //try using .reduce() instead for a more elegant solution
-    //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce
     if (moviesArray.length === 0) {
         return undefined;
     }
@@ -187,12 +160,6 @@ function topGrossingMovie(moviesArray) {
  * distributed by Walt Disney
  */
 function onlyDisneyMovies(moviesArray) {
-    //TODO: implement this according to the comments above
-    //match any casing of "Walt Disney": for example,
-    //you should include records where `distributor` equals
-    //"Walt Disney" or "walt disney" or "WALT DISNEY", etc.
-    //try using .filter() to accomplish this
-    //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter
     return moviesArray.filter(
         function(movie) {
             return movie.distributor.toLowerCase() === "walt disney";
@@ -228,10 +195,6 @@ function top10DisneyMovies(moviesArray) {
  * @returns {Movie[]} an array containing the top 10 grossing comedy movie objects
  */
 function top10Comedies(moviesArray) {
-    //TODO: implement this according to the comments above
-    //your code should do a case-insensitive comparison 
-    //of the `genre` property so that you include
-    //"Comedy", "comedy", "COMEDY", etc.
     return moviesArray
     .filter(
         function(movie) {
@@ -257,14 +220,6 @@ function top10Comedies(moviesArray) {
  * for each distinct `distributor` value in the input array.
  */
 function distinctDistributors(moviesArray) {
-    //TODO: implement this according to the comments above
-    //if the `distributor` property for a movie is missing or
-    //zero-length, use the literal string "(none)" instead.
-
-    //HINT: many movies are released by the same distributor, 
-    // so you need to select only the distinct distributor
-    // values and return those as an array. Remember that the
-    // properties of a JavaScript object are a unique set.
     return moviesArray
     .map(
         function(movie) {
