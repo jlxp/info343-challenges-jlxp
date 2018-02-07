@@ -49,14 +49,14 @@ footer {
   background-size: 100%; }
   #uses .use {
     padding: 0.5rem;
-    display: flex; } /*must put flex on container element and on child colum element to make the cards the same size*/
+    display: flex; }
     #uses .use .card {
       border-color: rgba(0, 0, 0, 0.125);
       border-radius: 0.25rem;
       background-color: #fff;
-      /*height: 100%; this doesn't work on all browsers*/ }
+      border-width: 1px; }
       #uses .use .card img {
-        width: 100%;
+        max-width: 100%;
         border-color: rgba(0, 0, 0, 0.125);
         border-radius: 0.25rem 0.25rem 0 0; }
       #uses .use .card .card-body {

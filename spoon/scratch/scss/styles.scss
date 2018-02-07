@@ -72,15 +72,16 @@ footer {
     background-size: 100%;
     .use {
         padding: 0.5rem;
+        display: flex;
 
         .card {
             border-color: $border-edge;
             border-radius: $border-curve;
             background-color: $white;
-            height: 100%;
-        
+            border-width: 1px;
+            
             img {
-                width: 100%;
+                max-width: 100%;
                 border-color: $border-edge;
                 border-radius: $border-curve $border-curve 0 0;
             }
