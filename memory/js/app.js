@@ -65,10 +65,12 @@ newGame();
 function renderTile(tile) {
     let button = document.createElement("button");
     let img = document.createElement("img");
+    button.setAttribute("aria-label", "back of the tile");
     button.appendChild(img);
     img.src = TILEBACK;
     img.alt = TILEBACKALT;
     button.addEventListener("click", function() {
+        button.setAttribute("aria-label", "front of tile is " + tile.alt);
         img.src = tile.url;
         img.alt = tile.alt;
         img.classList.add("clicked");
@@ -90,7 +92,7 @@ function renderTile(tile) {
                     matches[0].alt = TILEBACKALT; 
                     matches[1].src = TILEBACK;
                     matches[1].alt = TILEBACKALT; 
-                ;}, 1000);
+                ;}, 500);
                 state.missed++;
                 document.querySelector("#missedMatches").textContent = state.missed;
             }
@@ -107,5 +109,5 @@ function renderTimer(state) {
     let seconds = ((milliseconds % 60000) / 1000).toFixed(0);   
     
     let time = document.querySelector("#time");
-    time.textContent = "" + minutes + ":" + seconds;
+    time.textContent = "" + minutes + " min " + seconds + " sec";
 }
