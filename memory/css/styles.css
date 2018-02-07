@@ -1,1 +1,57 @@
 /* define any style rules you need here */
+* {
+    box-sizing: border-box;
+}
+#stats {
+    
+}
+
+#tiles {
+    height: 60vh;
+    width: 95vw;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-content: space-between;
+}
+
+#tiles button {
+    background-color: white;
+    height: 25%;
+    width: 25%;
+    padding: 0;
+}
+
+img {
+    height: 100%;
+    width: 100%;
+}
+
+#stats {
+    display: flex;
+    justify-content: space-between;
+}
+
+@media(min-width: 768px) {
+    #tiles {
+        height: 90vh;
+        width: 55vw;
+    }
+
+    body {
+        padding-left: 20%;
+        padding-right: 25%;
+        margin: 0%;
+    }
+}
+
+@media(min-width: 768px) {
+    #tiles {
+        width: 500px;
+    }
+    body {
+        padding-left: 30%;
+        padding-right: 30%;
+        margin: 0%;
+    }
+}
