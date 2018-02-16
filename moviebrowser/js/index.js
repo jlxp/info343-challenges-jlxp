@@ -67,11 +67,12 @@ function renderMovie(movie) {
     button.addEventListener("click", function() {
         let movieApi = SEARCH_API + "movie/" + movie.id + API_Key;
         console.log("button clicked");
-
         fetch(movieApi)
             .then(handleResponse)
-            .then(renderPopUp)
+            .then(renderModal)
             .catch(handleError);
+        
+        $("#movieModal").modal("show");
     });
     // appending
     div.appendChild(img);
@@ -83,67 +84,39 @@ function renderMovie(movie) {
     return div;
 }
 
-function renderPopUp(data) {
+function renderModal(data) {
     console.log(data);
-    ERROR_ALERT_DIV.classList.add("d-none");
-    document.querySelector("#modal").textContent = "";
-    document.querySelector("#modal").appendChild(renderModal(data));
-}
+    let body = document.querySelector(".modal-body");
+    body.textContent = "";
+    let tag = document.createElement("p");
+    tag.textContent = data.tagline;
+    body.appendChild(tag);
+    
+    let img = document.createElement("img");
+    img.src = "https://image.tmdb.org/t/p/w500" + data.poster_path;
+    body.appendChild(img);
+    document.querySelector(".modal-title").textContent = data.title;
+    
+    let overview = document.createElement("p");
+    overview.textContent = data.overview;
+    body.appendChild(overview);
 
-function renderModal(movie) {
-    console.log(movie);
-    let divOuter = document.createElement("div");
-    divOuter.id = "myModal";
-    divOuter.classList.add("modal", "fade");
-    divOuter.setAttribute("role", "dialog");
+    for (let i = 0; i < data.genres.length; i++) {
+        let genres = document.createElement("li");
+        genres.textContent = data.genres[i].name;
+        body.appendChild(genres);
+    }
 
-    let innerDiv = document.createElement("div");
-    innerDiv.classList.add("modal-dialog");
-    divOuter.appendChild(innerDiv);
+    let homepage = document.createElement("a");
+    homepage.href = data.homepage;
+    homepage.textContent = data.homepage;
+    body.appendChild(homepage);
 
-    let divCont = document.createElement("div");
-    divCont.classList.add("modal-content");
-    innerDiv.appendChild(divCont);
-
-    let divHead = document.createElement("div");
-    divHead.classList.add("modal-header");
-    divCont.appendChild(divHead);
-
-    let h5 = document.createElement("h5");
-    h5.classList.add("modal-title");
-    h5.id = "movieid?";
-    h5.textContent = "Movie Title";
-
-    let button = document.createElement("button");
-    button.classList.add("close");
-    button.setAttribute("data-dismiss", "modal");
-    button.setAttribute("aria-label", "Close");
-
-    let span = document.createElement("span");
-    span.setAttribute("aria-hidden", "true");
-    span.textContent = "&times;";
-    divHead.appendChild(h5);
-    divHead.appendChild(button);
-    button.appendChild(span);
-
-    let divBody = document.createElement("div");
-    divBody.classList.add("modal-body");
-    divBody.textContent = "movie text";
-    divCont.appendChild(divBody);
-
-    let divFoot = document.createElement("div");
-    divFoot.classList.add("modal-footer");
-
-    let button2 = document.createElement("button");
-    button2.setAttribute("type", "button");
-    button2.classList.add("btn", "btn-secondary");
-    button2.setAttribute("data-dismiss", "modal");
-    button2.textContent = "Close";
-
-    divFoot.appendChild(button2);
-    divCont.appendChild(divFoot);
-
-    return divOuter;
+    for (let i = 0; i < data.production_companies.length; i++) {
+        let companies = document.createElement("li");
+        companies.textContent = data.production_companies[i].name;
+        body.appendChild(companies);
+    }
 }
 
 function render(data) {
@@ -204,7 +177,7 @@ function renderGenre(genre) {
 document.querySelector("#list-home-list")
     .addEventListener("click", function() {
         discover();
-    })
+    });
 
 document.querySelector("#next")
     .addEventListener("click", function() {
