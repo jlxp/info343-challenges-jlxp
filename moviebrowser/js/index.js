@@ -62,7 +62,7 @@ function renderMovie(movie) {
     button.classList.add("btn", "btn-primary");
     button.setAttribute("type", "button");
     button.setAttribute("data-toggle", "modal");
-    button.setAttribute("data-target", "#movieModal");
+    button.setAttribute("data-target", "#modal");
     button.textContent = "More";
     button.addEventListener("click", function() {
         let movieApi = SEARCH_API + "movie/" + movie.id + API_Key;
