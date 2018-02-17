@@ -41,23 +41,29 @@ function handleError(err) {
 }
 
 function renderMovie(movie) {
-    // renders a preview of the movie
     let div = document.createElement("div");
     div.classList.add("card");
-    // div.style = "";
+    
     let img = document.createElement("img");
     img.classList.add("card-img-top");
-    img.src = "https://image.tmdb.org/t/p/w500" + movie.backdrop_path; // put in alt img if it doesn't have a backdrop/poster path
+    if (movie.backdrop_path !== null) {
+        img.src = "https://image.tmdb.org/t/p/w500" + movie.backdrop_path;
+    } else {
+        img.src = "../img/img_not_available.png";
+    }
     img.alt = movie.title;
-    // the card body
+    
     let divBody = document.createElement("div");
     divBody.classList.add("card-body");
+    
     let h5 = document.createElement("h5");
     h5.classList.add("card-title");
     h5.textContent = movie.title;
+    
     let p = document.createElement("p");
-    p.classList.add("card-text");
+    p.classList.add("card-text", "line-clamp");
     p.textContent = movie.overview;
+    
     let button = document.createElement("button");
     button.classList.add("btn", "btn-primary");
     button.setAttribute("type", "button");
@@ -66,7 +72,6 @@ function renderMovie(movie) {
     button.textContent = "More";
     button.addEventListener("click", function() {
         let movieApi = SEARCH_API + "movie/" + movie.id + API_Key;
-        console.log("button clicked");
         fetch(movieApi)
             .then(handleResponse)
             .then(renderModal)
@@ -74,7 +79,7 @@ function renderMovie(movie) {
         
         $("#movieModal").modal("show");
     });
-    // appending
+
     div.appendChild(img);
     div.appendChild(divBody);
     divBody.appendChild(h5);
@@ -86,50 +91,56 @@ function renderMovie(movie) {
 
 function renderModal(data) {
     console.log(data);
-    let body = document.querySelector(".modal-body");
-    body.textContent = "";
-    let tag = document.createElement("p");
+    let tag = document.querySelector("p.tagline");
     tag.textContent = data.tagline;
-    body.appendChild(tag);
     
-    let img = document.createElement("img");
-    img.src = "https://image.tmdb.org/t/p/w500" + data.poster_path;
-    body.appendChild(img);
+    let img = document.querySelector("img.poster");
+    if (data.poster_path !== null) {
+        img.setAttribute("src", "https://image.tmdb.org/t/p/w500" + data.poster_path);
+    } else {
+        img.setAttribute("src", "../img/img_not_available.png");
+    }
     document.querySelector(".modal-title").textContent = data.title;
     
-    let overview = document.createElement("p");
+    let overview = document.querySelector("p.overview");
     overview.textContent = data.overview;
-    body.appendChild(overview);
-
+    document.querySelector("ul.genre").textContent = "";
     for (let i = 0; i < data.genres.length; i++) {
         let genres = document.createElement("li");
         genres.textContent = data.genres[i].name;
-        body.appendChild(genres);
+        document.querySelector("ul.genre").appendChild(genres);
     }
 
-    let homepage = document.createElement("a");
-    homepage.href = data.homepage;
+    let homepage = document.querySelector("a.homepage");
+    homepage.setAttribute("href", data.homepage);
     homepage.textContent = data.homepage;
-    body.appendChild(homepage);
 
+    document.querySelector("ul.companies").textContent = "";
     for (let i = 0; i < data.production_companies.length; i++) {
         let companies = document.createElement("li");
         companies.textContent = data.production_companies[i].name;
-        body.appendChild(companies);
+        document.querySelector("ul.companies").appendChild(companies);
     }
 }
 
 function render(data) {
-    console.log(data);
     // renders the initial page of the movies
     ERROR_ALERT_DIV.classList.add("d-none");
     RESULTS_DIV.textContent = "";
+    
     for (let i = 0; i < data.results.length; i++) {
         RESULTS_DIV.appendChild(renderMovie(data.results[i]));
     }
+
     let number = document.querySelector(".page-numbers");
     state.currentPage = data.page;
-    number.textContent = " " + state.currentPage + " of " + data.total_pages + " ";
+    let totalPages;
+    if (data.total_pages > 1000) {
+        totalPages = 1000;
+    } else {
+        totalPages = data.total_pages;
+    }
+    number.textContent = state.currentPage + " of " + totalPages;
     return number;
 }
 
@@ -152,8 +163,11 @@ function genre() {
 
 function renderNav(data) {
     ERROR_ALERT_DIV.classList.add("d-none");
+    let sideBar = document.querySelector("#myList");
+    let dropdown = document.querySelector(".dropdown-menu");
     for (let i = 0; i < data.genres.length; i++) {
-        document.querySelector("#myList").appendChild(renderGenre(data.genres[i]));
+        sideBar.appendChild(renderGenre(data.genres[i]));
+        dropdown.appendChild(renderGenreMenu(data.genres[i]));
     }
 }
 
@@ -168,13 +182,25 @@ function renderGenre(genre) {
             state.currentPage = 1;
             state.currentApi = DISCOVER_API;
             state.end = "&with_genres=" + genre.id;
-            console.log("this is the genre you clicked on " + genre.id);
             myFetch();
         });
     return a;
 }
 
-document.querySelector("#list-home-list")
+function renderGenreMenu(genre) {
+    let a = document.createElement("a");
+    a.classList.add("dropdown-item");
+    a.textContent = genre.name;
+        a.addEventListener("click", function() {
+            state.currentPage = 1;
+            state.currentApi = DISCOVER_API;
+            state.end = "&with_genres=" + genre.id;
+            myFetch();
+        });
+    return a;
+}
+
+document.querySelector("#list-all-list")
     .addEventListener("click", function() {
         discover();
     });
@@ -196,7 +222,8 @@ document.querySelector("#prev")
 document.querySelector("#search-form")
     .addEventListener("submit", function(event) {
         event.preventDefault();
-        // clear previous genre
+        document.querySelector(".show").classList.remove("active", "show");
+        document.querySelector("#list-all-list").classList.add("active", "show");
         state.currentPage = 1;
         state.currentApi = SEARCH_API + "search/movie" + API_Key + "&language=en-US&query=" + this.querySelector("input").value + "&page=";
         state.end = "";

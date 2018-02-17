@@ -1,0 +1,38 @@
+* {
+    box-sizing: border-box;
+}
+
+img.poster {
+    height: 500px;
+}
+
+main {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.card-text {
+    overflow: hidden;
+}
+
+.line-clamp {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+.null {
+    background-color: gray;
+    background-size: 100%;
+}
+
+.page-numbers {
+    font-size: 12px;
+}
+
+@media(min-width: 768px) {
+    .page-numbers {
+        font-size: 20px;
+    }
+}
