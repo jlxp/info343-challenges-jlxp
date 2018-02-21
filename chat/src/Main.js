@@ -2,18 +2,31 @@ import React from "react";
 import {Link} from "react-router-dom";
 import {ROUTES} from "./constants";
 
+// firebase
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/database';
+
+
 export default class MainView extends React.Component {
     componentDidMount() {
         console.log("main view did mount");
+        this.authUnlisten = firebase.auth().onAuthStateChanged(user => this.setState({currentUser: user}));
     }
     componentWillUnmount() {
         console.log("main view will unmount");
+        this.authUnlisten();
     }
     componentWillReceiveProps(nextProps) {
         console.log("switching from %s channel to %s channel",
             this.props.match.params.channelName,
             nextProps.match.params.channelName);
     }
+
+    handleSignOut() {
+        firebase.auth().signOut();
+    }
+        
     render() {
         return (
             <div>

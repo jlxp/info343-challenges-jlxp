@@ -2,13 +2,65 @@ import React from "react";
 import {Link} from "react-router-dom";
 import {ROUTES} from "./constants";
 
+import firebase from 'firebase/app';
+import 'firebase/auth';
+
+
+
 export default class SignInView extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            email: '',
+            password: '',
+        };
+    }
+
+
+    /**
+     * Called by React when this component
+     * is first "mounted" into the DOM, 
+     * meaning that it was rendered for the
+     * first time.
+     */
+    componentDidMount() {
+        //TODO: listen for Firebase authentication
+        //state changes and set the `currentUser`
+        //state property
+        this.authUnlisten = firebase.auth().onAuthStateChanged(user => this.setState({currentUser: user}));
+    }
+    /**
+     * Called by react when this component is
+     * about to be "unmounted," meaning that
+     * React is about to remove it's rendered
+     * content from the DOM.
+     */
+    componentWillUnmount() {
+        //TODO: stop listening for Firebase
+        //authentication state changes so that
+        //we don't call this.setState() while
+        //unmounted.
+        this.authUnlisten();
+    }
+
+    handleSignIn() {
+        //TODO: sign in using the email and password
+        //state values
+        // this.setState({working: true});
+        firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
+            .then(() => {
+                this.props.history.push(ROUTES.generalChannel);
+            })
+            .then(() => this.setState({fberror: undefined}))
+            .catch(err => this.setState({fberror: err}))
+            .then(() => this.setState({working: false}));
+    }
+    
     handleSubmit(evt) {
         evt.preventDefault();
-        //do your authentication
-        //if it was successful, then
-        this.props.history.push(ROUTES.generalChannel);
+        this.handleSignIn();
     }
+
     render() {
         return (
             <div>
@@ -25,14 +77,18 @@ export default class SignInView extends React.Component {
                                 <input type="text"
                                     id="email"
                                     className="form-control"
-                                    placeholder="your email address"/>
+                                    placeholder="your email address"
+                                    value={this.state.email}
+                                    onChange={event => this.setState({email: event.target.value})}/>
                             </div>
                             <div className="form-group">
                                 <label htmlFor="password">Password</label>
                                 <input type="password"
                                     id="password"
                                     className="form-control"
-                                    placeholder="your password"/>
+                                    placeholder="your password"
+                                    value={this.state.password}
+                                    onChange={event => this.setState({password: event.target.value})}/>
                             </div>
                             <div className="form-group">
                                 <button type="submit" className="btn btn-primary">Sign In</button>
