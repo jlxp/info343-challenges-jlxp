@@ -11,6 +11,7 @@ export default class SignUpView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            currentUser: undefined,
             email: '',
             password: '',
             confirmPassword: '',
@@ -86,7 +87,6 @@ export default class SignUpView extends React.Component {
                                     id="email"
                                     className="form-control"
                                     placeholder="your email address"
-                                    value={this.state.email}
                                     onChange={event => this.setState({email: event.target.value})}/>
                             </div>
                             <div className="form-group">
@@ -95,7 +95,6 @@ export default class SignUpView extends React.Component {
                                     id="password"
                                     className="form-control"
                                     placeholder="your password"
-                                    value={this.state.password}
                                     onChange={event => this.setState({password: event.target.value})}/>
                             </div>
                             <div className="form-group">
@@ -104,7 +103,6 @@ export default class SignUpView extends React.Component {
                                     id="confirm-password"
                                     className="form-control"
                                     placeholder="confirm your password"
-                                    value={this.state.confirmPassword}
                                     onChange={event => this.setState({confirmPassword: event.target.value})}/>
                             </div>
                             <div className="form-group">

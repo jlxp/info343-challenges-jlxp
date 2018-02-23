@@ -5,5 +5,6 @@ export const ROUTES = {
     signUp: "/signup",
     main: "/channels/:channelName",
     generalChannel: "/channels/general",
-    randomChannel: "/channels/random"
+    randomChannel: "/channels/random",
+    signedOut: "/signedout"
 }

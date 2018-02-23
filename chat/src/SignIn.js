@@ -11,6 +11,7 @@ export default class SignInView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            currentUser: undefined,
             email: '',
             password: '',
         };
@@ -48,9 +49,7 @@ export default class SignInView extends React.Component {
         //state values
         // this.setState({working: true});
         firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
-            .then(() => {
-                this.props.history.push(ROUTES.generalChannel);
-            })
+            .then(() => {this.props.history.push(ROUTES.generalChannel)})
             .then(() => this.setState({fberror: undefined}))
             .catch(err => this.setState({fberror: err}))
             .then(() => this.setState({working: false}));
@@ -78,7 +77,6 @@ export default class SignInView extends React.Component {
                                     id="email"
                                     className="form-control"
                                     placeholder="your email address"
-                                    value={this.state.email}
                                     onChange={event => this.setState({email: event.target.value})}/>
                             </div>
                             <div className="form-group">
@@ -87,7 +85,6 @@ export default class SignInView extends React.Component {
                                     id="password"
                                     className="form-control"
                                     placeholder="your password"
-                                    value={this.state.password}
                                     onChange={event => this.setState({password: event.target.value})}/>
                             </div>
                             <div className="form-group">
