@@ -7,23 +7,33 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
 
+import NewMessageForm from "./NewMessageForm";
+import MessageList from "./MessageList";
 
 export default class MainView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            messageRef: undefined,
-            messageSnap: undefined
+            messagesRef: undefined,
+            messagesSnap: undefined
         }
     }
     
     componentDidMount() {
         console.log("main view did mount");
-        // this.authUnlisten = firebase.auth().onAuthStateChanged(user => this.setState({currentUser: user}));
+        this.unlistenAuth = firebase.auth().onAuthStateChanged(user => {
+            if (user) {
+                let userID = user.uid;
+                let ref = firebase.database().ref(`${userID}/messages`);
+                this.valueListener = ref.on("value", snapshot => this.setState({messagesSnap: snapshot}));
+                this.setState({messagesRef: ref});
+            }
+        });
     }
     componentWillUnmount() {
         console.log("main view will unmount");
-        // this.authUnlisten();
+        this.unlistenAuth();
+        this.state.messagesRef.off("value", this.valueListener);
     }
     componentWillReceiveProps(nextProps) {
         console.log("switching from %s channel to %s channel",
@@ -72,14 +82,10 @@ export default class MainView extends React.Component {
                         </li>
                         <li><Link to={ROUTES.randomChannel}>random</Link></li>
                     </ul>
-                    <form className="mb-4">
-                        <input type="text"
-                            className="form-control"
-                            // value={this.state.q}
-                            placeholder="Type a message"
-                            // onInput={evt => this.setState({q: evt.target.value})}
-                        />
-                    </form>
+                    <div className="container">
+                        <MessageList messagesSnap={this.state.messagesSnap} />
+                        <NewMessageForm messagesRef={this.state.messagesRef} />
+                    </div>
                 </main>
             </div>
         );
