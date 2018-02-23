@@ -72,19 +72,29 @@ export default class MainView extends React.Component {
                     </div>
                 </header>
                 <main>
-                    <ul>
-                        <li>
-                            {
-                                this.props.match.params.channelName !== "general" ? 
-                                <Link to={ROUTES.generalChannel}>general</Link> :
-                                "general"
-                            }
-                        </li>
-                        <li><Link to={ROUTES.randomChannel}>random</Link></li>
-                    </ul>
                     <div className="container">
-                        <MessageList messagesSnap={this.state.messagesSnap} />
-                        <NewMessageForm messagesRef={this.state.messagesRef} />
+                        <div className="row">
+                            <div className="col-2" id="side-nav">
+                                <ul>
+                                    <p> #
+                                        {
+                                            this.props.match.params.channelName !== "general" ? 
+                                            <Link to={ROUTES.generalChannel}>general</Link> :
+                                            "general"
+                                        }
+                                    </p>
+                                    <p>#<Link to={ROUTES.randomChannel}>random</Link></p>
+                                </ul>
+                            </div>
+                            <div className="col">
+                                <div className="text-right mb-auto">
+                                    <MessageList messagesSnap={this.state.messagesSnap} />
+                                </div>
+                                <div className="">
+                                    <NewMessageForm messagesRef={this.state.messagesRef} />
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </main>
             </div>

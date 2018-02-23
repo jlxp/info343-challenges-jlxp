@@ -20,29 +20,11 @@ export default class SignUpView extends React.Component {
         };
     }
 
-    /**
-     * Called by React when this component
-     * is first "mounted" into the DOM, 
-     * meaning that it was rendered for the
-     * first time.
-     */
     componentDidMount() {
-        //TODO: listen for Firebase authentication
-        //state changes and set the `currentUser`
-        //state property
         this.authUnlisten = firebase.auth().onAuthStateChanged(user => this.setState({currentUser: user}));
     }
-    /**
-     * Called by react when this component is
-     * about to be "unmounted," meaning that
-     * React is about to remove it's rendered
-     * content from the DOM.
-     */
+
     componentWillUnmount() {
-        //TODO: stop listening for Firebase
-        //authentication state changes so that
-        //we don't call this.setState() while
-        //unmounted.
         this.authUnlisten();
     }
 
@@ -59,14 +41,12 @@ export default class SignUpView extends React.Component {
 
     handleSubmit(evt) {
         evt.preventDefault();
-        //TODO: check if password is 6 char in length
-        //if it was successful, then
         this.handleSignUp();
         this.props.history.push(ROUTES.generalChannel);
     }
 
     render() {
-        let invalid = this.state.password !== this.state.confirmPassword || this.state.password === '' || this.state.email === '' || this.state.confirmPassword === '' || this.state.password.length < 6;
+        let invalid = this.state.password !== this.state.confirmPassword || this.state.password === '' || this.state.email === '' || this.state.confirmPassword === '' || this.state.password.length < 6 || this.displayName === '';
         
         return (
             <div>
@@ -88,6 +68,14 @@ export default class SignUpView extends React.Component {
                                     className="form-control"
                                     placeholder="your email address"
                                     onChange={event => this.setState({email: event.target.value})}/>
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="displayName">Display Name</label>
+                                <input type="text"
+                                    id="displayName"
+                                    className="form-control"
+                                    placeholder="the name you want displayed to other users"
+                                    onChange={event => this.setState({displayName: event.target.value})}/>
                             </div>
                             <div className="form-group">
                                 <label htmlFor="password">Password</label>
