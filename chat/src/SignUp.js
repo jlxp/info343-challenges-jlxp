@@ -5,6 +5,8 @@ import {ROUTES} from "./constants";
 import firebase from 'firebase/app';
 import 'firebase/auth';
 
+import md5 from "blueimp-md5";
+
 // https://www.robinwieruch.de/complete-firebase-authentication-react-tutorial/
 
 export default class SignUpView extends React.Component {
@@ -32,7 +34,7 @@ export default class SignUpView extends React.Component {
         firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
           .then(user => user.updateProfile({
             displayName: this.state.displayName,
-            photoURL: this.photoURL
+            photoURL: "https://www.gravatar.com/avatar/" + md5(this.state.email)
           }))
           .then(() => this.setState({fberror: undefined}))
           .catch(err => this.setState({fberror: err}))

@@ -15,7 +15,8 @@ export default class MainView extends React.Component {
         super(props);
         this.state = {
             messagesRef: undefined,
-            messagesSnap: undefined
+            messagesSnap: undefined,
+            userID: undefined
         }
     }
     
@@ -23,8 +24,8 @@ export default class MainView extends React.Component {
         console.log("main view did mount");
         this.unlistenAuth = firebase.auth().onAuthStateChanged(user => {
             if (user) {
-                let userID = user.uid;
-                let ref = firebase.database().ref(`${userID}/messages`);
+                this.setState({userID: user.uid});
+                let ref = firebase.database().ref(`${this.state.userID}/messages/general`);
                 this.valueListener = ref.on("value", snapshot => this.setState({messagesSnap: snapshot}));
                 this.setState({messagesRef: ref});
             }
@@ -35,10 +36,15 @@ export default class MainView extends React.Component {
         this.unlistenAuth();
         this.state.messagesRef.off("value", this.valueListener);
     }
+
     componentWillReceiveProps(nextProps) {
         console.log("switching from %s channel to %s channel",
             this.props.match.params.channelName,
             nextProps.match.params.channelName);
+        this.state.messagesRef.off("value", this.valueListener);
+        let ref = firebase.database().ref(`${this.state.userID}/messages/${nextProps.match.params.channelName}`);
+        this.valueListener = ref.on("value", snapshot => this.setState({messagesSnap: snapshot}));
+        this.setState({messagesRef: ref});
     }
 
     handleSignOut() {

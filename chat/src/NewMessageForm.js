@@ -1,4 +1,8 @@
  import React from "react";
+ import firebase from 'firebase/app';
+import 'firebase/auth';
+
+
  
  export default class NewMessageForm extends React.Component {
     constructor(props) {
@@ -11,8 +15,16 @@
 
     handleSubmit(event) {
         event.preventDefault();
+        let user = firebase.auth().currentUser;
+        let author = {
+            name: user.displayName,
+            photoUrl: user.photoURL,
+            uid: user.uid
+        } //https://firebase.google.com/docs/auth/web/manage-users
         let message = {
-            text: this.state.message
+            author: author,
+            body: this.state.message,
+            createdAt: firebase.database.ServerValue.TIMESTAMP
         };
         this.props.messagesRef.push(message)
             .then(() => this.setState({message: "", fbError: undefined}))

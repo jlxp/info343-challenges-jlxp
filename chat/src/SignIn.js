@@ -13,41 +13,19 @@ export default class SignInView extends React.Component {
         this.state = {
             currentUser: undefined,
             email: '',
-            password: '',
+            password: ''
         };
     }
 
-
-    /**
-     * Called by React when this component
-     * is first "mounted" into the DOM, 
-     * meaning that it was rendered for the
-     * first time.
-     */
     componentDidMount() {
-        //TODO: listen for Firebase authentication
-        //state changes and set the `currentUser`
-        //state property
         this.authUnlisten = firebase.auth().onAuthStateChanged(user => this.setState({currentUser: user}));
     }
-    /**
-     * Called by react when this component is
-     * about to be "unmounted," meaning that
-     * React is about to remove it's rendered
-     * content from the DOM.
-     */
+
     componentWillUnmount() {
-        //TODO: stop listening for Firebase
-        //authentication state changes so that
-        //we don't call this.setState() while
-        //unmounted.
         this.authUnlisten();
     }
 
     handleSignIn() {
-        //TODO: sign in using the email and password
-        //state values
-        // this.setState({working: true});
         firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
             .then(() => {this.props.history.push(ROUTES.generalChannel)})
             .then(() => this.setState({fberror: undefined}))
