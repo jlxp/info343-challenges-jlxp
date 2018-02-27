@@ -16,7 +16,7 @@ export default class MainView extends React.Component {
         this.state = {
             messagesRef: undefined,
             messagesSnap: undefined,
-            userID: undefined
+            // userID: undefined
         }
     }
     
@@ -24,10 +24,11 @@ export default class MainView extends React.Component {
         console.log("main view did mount");
         this.unlistenAuth = firebase.auth().onAuthStateChanged(user => {
             if (user) {
-                this.setState({userID: user.uid});
-                let ref = firebase.database().ref(`${this.state.userID}/messages/general`);
+                // this.setState({userID: user.uid});
+                let ref = firebase.database().ref(`messages/general`);
                 this.valueListener = ref.on("value", snapshot => this.setState({messagesSnap: snapshot}));
                 this.setState({messagesRef: ref});
+                // console.log(ref);
             }
         });
     }
@@ -36,13 +37,13 @@ export default class MainView extends React.Component {
         this.unlistenAuth();
         this.state.messagesRef.off("value", this.valueListener);
     }
-
+    
     componentWillReceiveProps(nextProps) {
-        console.log("switching from %s channel to %s channel",
-            this.props.match.params.channelName,
-            nextProps.match.params.channelName);
+        // console.log("switching from %s channel to %s channel",
+        //     this.props.match.params.channelName,
+        //     nextProps.match.params.channelName);
         this.state.messagesRef.off("value", this.valueListener);
-        let ref = firebase.database().ref(`${this.state.userID}/messages/${nextProps.match.params.channelName}`);
+        let ref = firebase.database().ref(`messages/${nextProps.match.params.channelName}`);
         this.valueListener = ref.on("value", snapshot => this.setState({messagesSnap: snapshot}));
         this.setState({messagesRef: ref});
     }
@@ -50,7 +51,7 @@ export default class MainView extends React.Component {
     handleSignOut() {
         console.log("user signed out")
         firebase.auth().signOut();
-    }
+    }    
         
     render() {
         return (
@@ -93,12 +94,27 @@ export default class MainView extends React.Component {
                                 </ul>
                             </div>
                             <div className="col">
-                                <div className="text-right mb-auto">
+                                <div className="mb-auto">
                                     <MessageList messagesSnap={this.state.messagesSnap} />
                                 </div>
+                                {
                                 <div className="">
-                                    <NewMessageForm messagesRef={this.state.messagesRef} />
+                                    <NewMessageForm messagesRef={this.state.messagesRef}>
+                                        <button
+                                            className=" btn btn-outline-primary"
+                                            // onClick={() => this.handleEdit(message.ref)}
+                                        >
+                                                Edit
+                                        </button>
+                                        <button
+                                            className="btn btn-outline-primary"
+                                            // onClick={() => this.handleDelete(message)}
+                                        >
+                                                Delete
+                                        </button>
+                                    </NewMessageForm>
                                 </div>
+                                }
                             </div>
                         </div>
                     </div>
