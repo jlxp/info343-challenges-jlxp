@@ -2,8 +2,6 @@
  import firebase from 'firebase/app';
 import 'firebase/auth';
 
-
- 
  export default class NewMessageForm extends React.Component {
     constructor(props) {
         super(props);
@@ -20,7 +18,7 @@ import 'firebase/auth';
             name: user.displayName,
             photoUrl: user.photoURL,
             uid: user.uid
-        } //https://firebase.google.com/docs/auth/web/manage-users
+        };
         let message = {
             author: author,
             body: this.state.message,

@@ -15,33 +15,26 @@ export default class MainView extends React.Component {
         super(props);
         this.state = {
             messagesRef: undefined,
-            messagesSnap: undefined,
-            // userID: undefined
+            messagesSnap: undefined
         }
     }
     
     componentDidMount() {
-        console.log("main view did mount");
         this.unlistenAuth = firebase.auth().onAuthStateChanged(user => {
             if (user) {
-                // this.setState({userID: user.uid});
                 let ref = firebase.database().ref(`messages/general`);
                 this.valueListener = ref.on("value", snapshot => this.setState({messagesSnap: snapshot}));
                 this.setState({messagesRef: ref});
-                // console.log(ref);
             }
         });
     }
+    
     componentWillUnmount() {
-        console.log("main view will unmount");
         this.unlistenAuth();
         this.state.messagesRef.off("value", this.valueListener);
     }
     
     componentWillReceiveProps(nextProps) {
-        // console.log("switching from %s channel to %s channel",
-        //     this.props.match.params.channelName,
-        //     nextProps.match.params.channelName);
         this.state.messagesRef.off("value", this.valueListener);
         let ref = firebase.database().ref(`messages/${nextProps.match.params.channelName}`);
         this.valueListener = ref.on("value", snapshot => this.setState({messagesSnap: snapshot}));
@@ -49,22 +42,21 @@ export default class MainView extends React.Component {
     }
 
     handleSignOut() {
-        console.log("user signed out")
         firebase.auth().signOut();
     }    
         
     render() {
         return (
             <div>
-                <header className="bg-secondary text-white">
+                <header className="bg-primary text-white fixed-top">
                     <div className="container-fluid">
                         <div className="row align-items-center">
                             <div className="col">
                                 <h1 className="col">#{this.props.match.params.channelName}</h1>
                             </div>
                             <div className="col-auto">
-                                <Link to={ROUTES.signedOut}>
-                                    <button type="button" onClick={this.handleSignOut} className="btn btn-secondary">
+                                <Link to={ROUTES.signIn}>
+                                    <button type="button" onClick={this.handleSignOut} className="btn btn-primary">
                                         <svg width="24" height="24" fill="#FFF" viewBox="0 0 24 24"
                                             role="button"
                                             aria-label="sign out button"
@@ -82,39 +74,28 @@ export default class MainView extends React.Component {
                     <div className="container">
                         <div className="row">
                             <div className="col-2" id="side-nav">
-                                <ul>
-                                    <p> #
+                                <button className="btn btn-outline-primary" id="general">#
                                         {
                                             this.props.match.params.channelName !== "general" ? 
                                             <Link to={ROUTES.generalChannel}>general</Link> :
                                             "general"
                                         }
-                                    </p>
-                                    <p>#<Link to={ROUTES.randomChannel}>random</Link></p>
-                                </ul>
+                                </button>
+                                <button className="btn btn-outline-primary" id="random">#
+                                {
+                                        this.props.match.params.channelName !== "random" ?
+                                        <Link to={ROUTES.randomChannel}>random</Link> :
+                                        "random"
+                                }
+                                </button>
                             </div>
-                            <div className="col">
-                                <div className="mb-auto">
+                            <div className="col" id="content">
+                                <div className="" id="messages">
                                     <MessageList messagesSnap={this.state.messagesSnap} />
                                 </div>
-                                {
-                                <div className="">
-                                    <NewMessageForm messagesRef={this.state.messagesRef}>
-                                        <button
-                                            className=" btn btn-outline-primary"
-                                            // onClick={() => this.handleEdit(message.ref)}
-                                        >
-                                                Edit
-                                        </button>
-                                        <button
-                                            className="btn btn-outline-primary"
-                                            // onClick={() => this.handleDelete(message)}
-                                        >
-                                                Delete
-                                        </button>
-                                    </NewMessageForm>
+                                <div id="new-message">
+                                    <NewMessageForm messagesRef={this.state.messagesRef} />
                                 </div>
-                                }
                             </div>
                         </div>
                     </div>

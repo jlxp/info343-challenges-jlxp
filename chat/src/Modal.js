@@ -1,36 +1,51 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-class Modal extends React.Component {
+import { Button, Modal, ModalBody, ModalFooter, FormGroup, Label, Input } from 'reactstrap';
+
+class EditModal extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+        modal: false,
+        newMessage: ""
+        };
+        this.toggle = this.toggle.bind(this);
+    }
+
+    toggle() {
+        this.setState({
+        modal: !this.state.modal
+        });
+    }
+
+    handleEdit(messageSnap) {
+        if (this.state.newMessage !== "") {
+            let editText = {
+                body: this.state.newMessage
+            }
+            messageSnap.ref.update(editText);
+        }
+        this.toggle();
+    }
+
     render() {
         return (
-            <div className="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div className="modal-dialog" role="document">
-                <div className="modal-content">
-                <div className="modal-header">
-                    <h5 className="modal-title" id="exampleModalLabel">New message</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div className="modal-body">
-                    <form>
-                    <div className="form-group">
-                        <label for="recipient-name" class="col-form-label">Recipient:</label>
-                        <input type="text" class="form-control" id="recipient-name"/>
-                    </div>
-                    <div className="form-group">
-                        <label for="message-text" class="col-form-label">Message:</label>
-                        <textarea className="form-control" id="message-text"></textarea>
-                    </div>
-                    </form>
-                </div>
-                <div className="modal-footer">
-                    <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" className="btn btn-primary">Send message</button>
-                </div>
-                </div>
-            </div>
-            </div>
+        <div>
+            <Button className="btn btn-outline-primary btn-sm" onClick={this.toggle}>Edit</Button>
+            <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
+            <ModalBody>
+                <FormGroup>
+                    <Label for="exampleText">Edit your message</Label>
+                    <Input type="textarea" name="text" id="exampleText" defaultValue={this.props.messageSnap.val().body} onInput={evt => this.setState({newMessage: evt.target.value})} />
+                </FormGroup>
+            </ModalBody>
+            <ModalFooter>
+                <Button color="primary" onClick={() => this.handleEdit(this.props.messageSnap)}>Save Changes</Button>
+                <Button color="secondary" onClick={this.toggle}>Cancel</Button>
+            </ModalFooter>
+            </Modal>
+        </div>
         );
     }
 }
+
+export default EditModal;

@@ -1,11 +1,8 @@
 import React from "react";
 import {Link} from "react-router-dom";
 import {ROUTES} from "./constants";
-
 import firebase from 'firebase/app';
 import 'firebase/auth';
-
-
 
 export default class SignInView extends React.Component {
     constructor(props) {
@@ -29,8 +26,8 @@ export default class SignInView extends React.Component {
         firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
             .then(() => {this.props.history.push(ROUTES.generalChannel)})
             .then(() => this.setState({fberror: undefined}))
-            .catch(err => this.setState({fberror: err}))
-            .then(() => this.setState({working: false}));
+            .then(() => this.setState({working: false}))
+            .catch(err => this.setState({fberror: err}));
     }
     
     handleSubmit(evt) {
@@ -39,6 +36,7 @@ export default class SignInView extends React.Component {
     }
 
     render() {
+        let invalid = this.state.email === "" || this.state.password === "";
         return (
             <div>
                 <header className="jumbotron jumbotron-fluid bg-primary text-white">
@@ -66,7 +64,7 @@ export default class SignInView extends React.Component {
                                     onChange={event => this.setState({password: event.target.value})}/>
                             </div>
                             <div className="form-group">
-                                <button type="submit" className="btn btn-primary">Sign In</button>
+                                <button disabled={invalid} type="submit" className="btn btn-primary">Sign In</button>
                             </div>
                         </form>
                         <p>Don't have an account yet? <Link to={ROUTES.signUp}>Sign Up!</Link></p>

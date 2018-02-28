@@ -1,20 +1,11 @@
 import React from "react";
 import firebase from 'firebase/app';
+import EditModal from "./Modal.js"
 
 export default class Message extends React.Component {
-        
+
     handleDelete(messageRef) {
         messageRef.remove();
-    }
-
-    handleEdit(messageSnap) {
-        console.log("edit the message!");
-        console.log(messageSnap.val());
-        let editText = {
-            body: messageSnap.val().body + "  edited"
-        }
-        console.log(editText.body);
-        messageSnap.ref.update(editText);
     }
 
     render() {
@@ -26,16 +17,19 @@ export default class Message extends React.Component {
             delButton = (
                 <button className="btn btn-outline-primary btn-sm" onClick={() => this.handleDelete(this.props.messageSnap.ref)}>Delete</button>
             );
-            editButton = (
-                <button className="btn btn-outline-primary btn-sm" onClick={() => this.handleEdit(this.props.messageSnap)}>Edit</button>
-            );
+            editButton = (<EditModal messageSnap={this.props.messageSnap}/>);
         }
         return (
-            <div id="message">
-                <h6 className="font-weight-bold"> {message.author.name} </h6>
-                <p>{date.toString()}</p>
+            <div className="pb-3" id="message">
+                <div className="d-flex border-bottom">
+                    <img src={message.author.photoUrl} alt={message.author.name} height="32" width="32" className="rounded-circle"/>
+                    <h5 className="font-weight-bold pl-3"> {message.author.name} </h5>
+                </div>
+                <p className="font-weight-light">{date.toLocaleString()}</p>
                 <p> {message.body} </p>
+                <div className="d-flex">
                 {editButton}{delButton}
+                </div>
             </div>
         )
     }

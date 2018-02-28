@@ -1,13 +1,9 @@
 import React from "react";
 import {Link} from "react-router-dom";
 import {ROUTES} from "./constants";
-
 import firebase from 'firebase/app';
 import 'firebase/auth';
-
 import md5 from "blueimp-md5";
-
-// https://www.robinwieruch.de/complete-firebase-authentication-react-tutorial/
 
 export default class SignUpView extends React.Component {
     constructor(props) {
@@ -58,10 +54,10 @@ export default class SignUpView extends React.Component {
                     </div>
                 </header>
                 <main>
-                    <div className="container">
+                    <div className="container pt-2 pb-2">
                         <p>Already have an account? <Link to={ROUTES.signIn}>Sign In!</Link></p>
                     </div>
-                    <div className="container">
+                    <div className="container pt-2">
                         <form onSubmit={evt => this.handleSubmit(evt)}>
                             <div className="form-group">
                                 <label htmlFor="email">Email Address</label>

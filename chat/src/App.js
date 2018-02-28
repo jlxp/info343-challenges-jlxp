@@ -1,14 +1,10 @@
 import React, { Component } from 'react';
-// import logo from './logo.svg';
 import './App.css';
-
-// routing
 import {HashRouter as Router, Switch, Redirect, Route} from "react-router-dom";
 import {ROUTES} from "./constants";
 import SignInView from "./SignIn";
 import SignUpView from "./SignUp";
 import MainView from "./Main";
-import SignedOutView from "./SignedOut";
 
 class App extends Component {
     render() {
@@ -18,7 +14,6 @@ class App extends Component {
             <Route exact path={ROUTES.signIn} component={SignInView} />
             <Route path={ROUTES.signUp} component={SignUpView} />
             <Route path={ROUTES.main} component={MainView}/>
-            <Route path={ROUTES.signedOut} component={SignedOutView}/>
             <Redirect to={ROUTES.signIn} />
           </Switch>
         </Router>
