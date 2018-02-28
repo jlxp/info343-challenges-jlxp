@@ -1,12 +1,9 @@
 import React from "react";
 import {Link} from "react-router-dom";
 import {ROUTES} from "./constants";
-
-// firebase
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
-
 import NewMessageForm from "./NewMessageForm";
 import MessageList from "./MessageList";
 
