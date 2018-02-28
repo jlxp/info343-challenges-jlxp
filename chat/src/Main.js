@@ -22,13 +22,17 @@ export default class MainView extends React.Component {
                 let ref = firebase.database().ref(`messages/general`);
                 this.valueListener = ref.on("value", snapshot => this.setState({messagesSnap: snapshot}));
                 this.setState({messagesRef: ref});
+            } else {
+                this.props.history.push(ROUTES.signIn);
             }
         });
     }
     
     componentWillUnmount() {
         this.unlistenAuth();
-        this.state.messagesRef.off("value", this.valueListener);
+        if (this.state.messagesRef !== undefined) {
+            this.state.messagesRef.off("value", this.valueListener);
+        }
     }
     
     componentWillReceiveProps(nextProps) {
