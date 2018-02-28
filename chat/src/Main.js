@@ -20,9 +20,10 @@ export default class MainView extends React.Component {
         this.unlistenAuth = firebase.auth().onAuthStateChanged(user => {
             if (user) {
                 let ref = firebase.database().ref(`messages/general`);
-                this.valueListener = ref.on("value", snapshot => this.setState({messagesSnap: snapshot}));
+                this.valueListener = ref.limitToLast(500).on("value", snapshot => this.setState({messagesSnap: snapshot}));
                 this.setState({messagesRef: ref});
-            } else {
+            }
+            else {
                 this.props.history.push(ROUTES.signIn);
             }
         });
@@ -38,7 +39,7 @@ export default class MainView extends React.Component {
     componentWillReceiveProps(nextProps) {
         this.state.messagesRef.off("value", this.valueListener);
         let ref = firebase.database().ref(`messages/${nextProps.match.params.channelName}`);
-        this.valueListener = ref.on("value", snapshot => this.setState({messagesSnap: snapshot}));
+        this.valueListener = ref.limitToLast(500).on("value", snapshot => this.setState({messagesSnap: snapshot}));
         this.setState({messagesRef: ref});
     }
 

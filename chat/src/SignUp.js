@@ -33,14 +33,14 @@ export default class SignUpView extends React.Component {
             photoURL: "https://www.gravatar.com/avatar/" + md5(this.state.email)
           }))
           .then(() => this.setState({fberror: undefined}))
-          .catch(err => this.setState({fberror: err}))
-          .then(() => this.setState({working: false}));
+          .then(() => this.setState({working: false}))
+          .then(this.props.history.push(ROUTES.generalChannel))
+          .catch(err => this.setState({fberror: err}));
     }
 
     handleSubmit(evt) {
         evt.preventDefault();
         this.handleSignUp();
-        this.props.history.push(ROUTES.generalChannel);
     }
 
     render() {
